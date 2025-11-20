@@ -30,7 +30,8 @@ function ChatPage() {
   const [error, setError] = useState<string | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null)
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null)
+  const [playingId, setPlayingId] = useState<string | null>(null)
 
   useEffect(() => {
     // Load sessions from localStorage
@@ -45,7 +46,15 @@ function ChatPage() {
       // Create first session
       createNewSession()
     }
-  }, [])
+
+    // Cleanup audio on unmount
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause()
+        currentAudio.currentTime = 0
+      }
+    }
+  }, [currentAudio])
 
   const createNewSession = () => {
     const newSession: ChatSession = {
@@ -185,29 +194,41 @@ function ChatPage() {
     }
   }
 
-  const handlePlayPause = (audioFile?: string) => {
-    if (!audioFile) return
+  const handlePlayPause = (audioFile?: string, generationId?: string) => {
+    if (!audioFile || !generationId) return
 
-    if (audioElement) {
-      if (isPlaying) {
-        audioElement.pause()
-        setIsPlaying(false)
-      } else {
-        audioElement.play()
-        setIsPlaying(true)
-      }
-    } else {
-      // Create new audio element
-      const audio = new Audio(`${API_BASE_URL}${audioFile}`)
-      audio.addEventListener('ended', () => setIsPlaying(false))
-      audio.addEventListener('error', () => {
-        setError('Failed to load audio file')
-        setIsPlaying(false)
-      })
-      audio.play()
-      setAudioElement(audio)
-      setIsPlaying(true)
+    // Stop current audio if playing
+    if (currentAudio) {
+      currentAudio.pause()
+      currentAudio.currentTime = 0
     }
+
+    // If clicking same audio that's playing, just stop
+    if (playingId === generationId && isPlaying) {
+      setIsPlaying(false)
+      setPlayingId(null)
+      setCurrentAudio(null)
+      return
+    }
+
+    // Create and play new audio
+    const audio = new Audio(`${API_BASE_URL}${audioFile}`)
+    audio.addEventListener('ended', () => {
+      setIsPlaying(false)
+      setPlayingId(null)
+      setCurrentAudio(null)
+    })
+    audio.addEventListener('error', () => {
+      setError('Failed to load audio file')
+      setIsPlaying(false)
+      setPlayingId(null)
+      setCurrentAudio(null)
+    })
+    
+    audio.play()
+    setCurrentAudio(audio)
+    setIsPlaying(true)
+    setPlayingId(generationId)
   }
 
   const handleDownloadMidi = (midiFile: string) => {
@@ -354,13 +375,12 @@ function ChatPage() {
                     <div className="message-result">
                       <div className="result-info">
                         <span>ID: {msg.result.generation_id.slice(0, 8)}</span>
-                        <span>Tokens: {msg.result.tokens_generated}</span>
                       </div>
                       
                       {msg.result.audio_file && (
                         <div className="audio-controls">
-                          <button className="play-btn" onClick={() => handlePlayPause(msg.result!.audio_file)}>
-                            {isPlaying ? (
+                          <button className="play-btn" onClick={() => handlePlayPause(msg.result!.audio_file, msg.result!.generation_id)}>
+                            {isPlaying && playingId === msg.result!.generation_id ? (
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="6" y="4" width="4" height="16" fill="white" rx="1"/>
                                 <rect x="14" y="4" width="4" height="16" fill="white" rx="1"/>
@@ -370,7 +390,7 @@ function ChatPage() {
                                 <path d="M8 5v14l11-7z" fill="white"/>
                               </svg>
                             )}
-                            {isPlaying ? 'PAUSE' : 'PLAY'}
+                            {isPlaying && playingId === msg.result!.generation_id ? 'PAUSE' : 'PLAY'}
                           </button>
                         </div>
                       )}

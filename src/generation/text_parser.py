@@ -10,12 +10,12 @@ class EmotionParser:
     """Parse emotion from natural language text"""
     
     EMOTION_KEYWORDS = {
-        'joy': ['happy', 'joyful', 'excited', 'cheerful', 'upbeat', 'energetic', 'positive'],
-        'sadness': ['sad', 'melancholic', 'depressed', 'down', 'blue', 'unhappy', 'sorrowful'],
-        'anger': ['angry', 'furious', 'mad', 'aggressive', 'intense', 'fierce'],
-        'calm': ['calm', 'peaceful', 'relaxed', 'serene', 'tranquil', 'chill', 'mellow'],
-        'surprise': ['surprised', 'shocked', 'amazed', 'unexpected'],
-        'fear': ['scared', 'fearful', 'anxious', 'nervous', 'worried', 'tense']
+        'joy': ['happy', 'joyful', 'excited', 'cheerful', 'upbeat', 'energetic', 'positive', 'fun', 'bright', 'lively'],
+        'sadness': ['sad', 'melancholic', 'depressed', 'down', 'blue', 'unhappy', 'sorrowful', 'slow', 'dark', 'moody'],
+        'anger': ['angry', 'furious', 'mad', 'aggressive', 'intense', 'fierce', 'hard', 'heavy', 'powerful'],
+        'calm': ['calm', 'peaceful', 'relaxed', 'serene', 'tranquil', 'chill', 'mellow', 'soft', 'gentle', 'quiet'],
+        'surprise': ['surprised', 'shocked', 'amazed', 'unexpected', 'weird', 'strange', 'unusual'],
+        'fear': ['scared', 'fearful', 'anxious', 'nervous', 'worried', 'tense', 'mysterious', 'spooky', 'eerie']
     }
     
     EMOTION_TO_INDEX = {
