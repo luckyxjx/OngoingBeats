@@ -17,7 +17,7 @@
 
 ## 🌟 Overview
 
-EMOPIA is a cutting-edge AI system that generates emotionally expressive music using deep learning. Built on Transformer architecture and trained on emotion-labeled MIDI datasets, it creates coherent, multi-minute musical compositions that match specific emotional states.
+OnGoing Beats is a cutting-edge AI system that generates emotionally expressive music using deep learning. Built on Transformer architecture and trained on emotion-labeled MIDI datasets, it creates coherent, multi-minute musical compositions that match specific emotional states.
 
 ### ✨ Key Features
 
@@ -68,8 +68,7 @@ Output: 🎵 2-minute MIDI composition with serene harmonies
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/emopia-music-generation.git
-cd emopia-music-generation
+git clone https://github.com/yourusername/repo-name.git
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -127,7 +126,7 @@ Visit `http://localhost:5173` to start generating music! 🎉
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    EMOPIA System                         │
+│                    OnGoing Beats System                 │
 └─────────────────────────────────────────────────────────┘
                             │
         ┌───────────────────┼───────────────────┐
