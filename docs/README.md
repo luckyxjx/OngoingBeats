@@ -1,4 +1,4 @@
-# 🎵 EMOPIA: AI-Powered Emotion-Based Music Generation
+#   OnGoing Beats: AI-Powered Emotion-Based Music Generation
 
 <div align="center">
 
